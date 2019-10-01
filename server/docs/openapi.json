@@ -1,0 +1,217 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "TMDB Upcoming",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/v1/movies": {
+      "get": {
+        "summary": "List every upcoming movie",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The result page size. Default 20. Max 80",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of initial items that must be suppressed from the result. Default 0",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Optional parameter to filter movies by name",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoviesResponse"
+                },
+                "examples": {
+                  "any": {
+                    "value": {
+                      "movies": [
+                        {}
+                      ]
+                    }
+                  },
+                  "empty": {
+                    "description": "May return empty if name param does not match any movie in the database",
+                    "value": {
+                      "movies": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/movies/{movieId}": {
+      "get": {
+        "summary": "Returns a single movie and it's details",
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "path",
+            "required": true,
+            "description": "A valid movie id",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - the movie full details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movie"
+                },
+                "examples": {
+                  "snatch": {
+                    "value": {}
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Movie not found"
+          },
+          "503": {
+            "description": "System's database is unreachable",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/health": {
+      "get": {
+        "summary": "Simple helath-check to see if the app is running",
+        "parameters": [
+          {
+            "name": "dependencies",
+            "in": "query",
+            "description": "Tells the system to also check its dependencies",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - system is up"
+          },
+          "503": {
+            "description": "System is up but its dependencies are unreachable",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Any other error means that the server is not responding or is unreachable and should be treated as an error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MoviesResponse": {
+        "type": "object",
+        "description": "A wrapper to a list of movies. Movies listed here will be slim - with fewer properties",
+        "properties": {
+          "movies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Movie"
+            }
+          }
+        }
+      },
+      "Movie": {
+        "type": "object",
+        "description": "An upcoming movie",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Movie's name"
+          },
+          "poster": {
+            "type": "string",
+            "format": "url",
+            "description": "Movie's poster or backdrop image"
+          },
+          "genre": {
+            "type": "string",
+            "description": "Movie kind"
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "date",
+            "description": "The upcoming date the movie will be released, formatted based on RFC3339"
+          },
+          "overview": {
+            "type": "string",
+            "description": "Movie's sinopsis"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Movie unique identifier"
+          }
+        }
+      },
+      "Problem": {
+        "type": "object",
+        "description": "An object built to inform clients about what went wrong in the request. Based in RFC7807",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "An unique identifyer of the error"
+          },
+          "title": {
+            "type": "string",
+            "description": "A human readable description of the problem occurred"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The status code returned (typically 4xx or 5xx)"
+          }
+        }
+      }
+    }
+  }
+}
