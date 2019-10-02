@@ -42,7 +42,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MoviesResponse"
+                  "$ref": "#/components/schemas/MoviesCollection"
                 },
                 "examples": {
                   "any": {
@@ -92,6 +92,16 @@
                   "snatch": {
                     "value": {}
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid movie id",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
@@ -148,7 +158,7 @@
   },
   "components": {
     "schemas": {
-      "MoviesResponse": {
+      "MoviesCollection": {
         "type": "object",
         "description": "A wrapper to a list of movies. Movies listed here will be slim - with fewer properties",
         "properties": {
