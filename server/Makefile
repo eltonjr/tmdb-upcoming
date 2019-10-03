@@ -1,7 +1,9 @@
 include secrets.env
 include server.env
+export
 
 BINARY_NAME := server
+CMD_PATH := cmd/server
 
 .PHONY: deps	
 deps:
@@ -9,7 +11,12 @@ deps:
 
 .PHONY: build
 build:
-	cd cmd/server && CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ${BINARY_NAME}
+	cd ${CMD_PATH} && GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ${BINARY_NAME}
+
+.PHONY: run
+run:
+	#./${CMD_PATH}/${BINARY_NAME}
+	go run ${CMD_PATH}/${BINARY_NAME}.go
 
 .PHONY: test
 test:

@@ -10,19 +10,23 @@ import (
 )
 
 type (
-	response struct {
-		genres []genre
+	// Response is the mapped schema from the genres endpoint
+	Response struct {
+		Genres []Genre `json:"genres"`
 	}
 
-	genre struct {
-		id   int
-		name string
+	// Genre is the mapped schema from the genres endpoint
+	Genre struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
 	}
 )
 
 const genresPath = "/genre/movie/list"
 
 func init() {
+	collection = make(map[int]string)
+
 	url := fmt.Sprintf("%s%s", env.Vars.TMDB.Address, genresPath)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -41,13 +45,13 @@ func init() {
 
 	defer res.Body.Close()
 
-	var gs response
+	var gs Response
 	err = json.NewDecoder(res.Body).Decode(&gs)
 	if err != nil {
 		log.Fatalf("failed to read genres response: %v", err)
 	}
 
-	for _, g := range gs.genres {
-		collection[g.id] = g.name
+	for _, g := range gs.Genres {
+		collection[g.ID] = g.Name
 	}
 }

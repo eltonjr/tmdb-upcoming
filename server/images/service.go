@@ -11,11 +11,12 @@ import (
 
 const configurationPath = "/configuration"
 
-type response struct {
-	images struct {
-		base_url     string
-		poster_sizes []string
-	}
+// Response is the mapped schema from the configuration endpoint
+type Response struct {
+	Images struct {
+		BaseURL     string   `json:"base_url"`
+		PosterSizes []string `json:"poster_sizes"`
+	} `json:"images"`
 }
 
 func init() {
@@ -37,12 +38,12 @@ func init() {
 
 	defer res.Body.Close()
 
-	var c response
+	var c Response
 	err = json.NewDecoder(res.Body).Decode(&c)
 	if err != nil {
 		log.Fatalf("failed to read configuration response: %v", err)
 	}
 
-	env.Vars.TMDB.Images.BasePath = c.images.base_url
-	env.Vars.TMDB.Images.PosterSize = c.images.poster_sizes[1]
+	env.Vars.TMDB.Images.BasePath = c.Images.BaseURL
+	env.Vars.TMDB.Images.PosterSize = c.Images.PosterSizes[1]
 }

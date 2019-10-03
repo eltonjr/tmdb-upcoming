@@ -17,17 +17,19 @@ const (
 )
 
 type (
-	response struct {
-		results []movie
+	// Response is the mapped schema from the movie endpoint
+	Response struct {
+		Results []ResultMovie `json:"results"`
 	}
 
-	movie struct {
-		id           int
-		title        string
-		poster_path  string
-		genre_ids    []int
-		release_date string
-		overview     string
+	// ResultMovie is the mapped schema from the movie endpoint
+	ResultMovie struct {
+		ID          int    `json:"id"`
+		Title       string `json:"title"`
+		PosterPath  string `json:"poster_path"`
+		GenreIDs    []int  `json:"genre_ids"`
+		ReleaseDate string `json:"release_date"`
+		Overview    string `json:"overview"`
 	}
 )
 
@@ -57,14 +59,14 @@ func getMovies(name, page string) (Collection, error) {
 
 	defer res.Body.Close()
 
-	var ms response
+	var ms Response
 	err = json.NewDecoder(res.Body).Decode(&ms)
 	if err != nil {
 		return Collection{}, fmt.Errorf("failed to read movies response: %v", err)
 	}
 
 	var c Collection
-	for _, m := range ms.results {
+	for _, m := range ms.Results {
 		c.Movies = append(c.Movies, m.toMovieOutput())
 	}
 
@@ -90,7 +92,7 @@ func getMovie(id int) (Movie, error) {
 
 	defer res.Body.Close()
 
-	var m movie
+	var m ResultMovie
 	err = json.NewDecoder(res.Body).Decode(&m)
 	if err != nil {
 		return Movie{}, fmt.Errorf("failed to read movie response: %v", err)
@@ -99,19 +101,19 @@ func getMovie(id int) (Movie, error) {
 	return m.toMovieOutput(), nil
 }
 
-func (m movie) toMovieOutput() Movie {
-	r, err := time.Parse("2006-01-02", m.release_date)
+func (m ResultMovie) toMovieOutput() Movie {
+	r, err := time.Parse("2006-01-02", m.ReleaseDate)
 	var release *time.Time
 	if err == nil {
 		release = &r
 	}
 
 	return Movie{
-		ID:          m.id,
-		Name:        m.title,
-		Poster:      m.poster_path,
-		Genre:       genres.Get(m.genre_ids[0]),
+		ID:          m.ID,
+		Name:        m.Title,
+		Poster:      m.PosterPath,
+		Genre:       genres.Get(m.GenreIDs[0]),
 		ReleaseDate: release,
-		Overview:    m.overview,
+		Overview:    m.Overview,
 	}
 }

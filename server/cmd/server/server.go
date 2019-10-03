@@ -1,4 +1,4 @@
-package server
+package main
 
 import (
 	"log"
@@ -22,6 +22,7 @@ func main() {
 
 	r.GET("/v1/health", health.Check)
 
+	log.Printf("Server is running at %s", env.Vars.Server.Address)
 	if err := http.ListenAndServe(env.Vars.Server.Address, r); err != nil {
 		log.Fatalf("ListenAndServe: %v", err)
 	}
