@@ -10,18 +10,9 @@
         "summary": "List every upcoming movie",
         "parameters": [
           {
-            "name": "limit",
+            "name": "page",
             "in": "query",
-            "description": "The result page size. Default 20. Max 80",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "description": "Number of initial items that must be suppressed from the result. Default 0",
+            "description": "The results page. Default 1",
             "schema": {
               "type": "integer",
               "format": "int32"

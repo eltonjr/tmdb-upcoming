@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
 	"strconv"
 
 	"github.com/julienschmidt/httprouter"
@@ -18,10 +17,10 @@ import (
 // It's also possible to filter movies by name
 func GetAll(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	q := r.URL.Query()
-	limit, offset := getLimitOffset(q)
+	page := q.Get("page")
 	name := q.Get("name")
 
-	movies, err := getMovies(name, limit, offset)
+	movies, err := getMovies(name, page)
 	if err != nil {
 		errors.Respond(w, http.StatusInternalServerError, "unable to get movies", err.Error())
 		return
@@ -64,20 +63,4 @@ func GetOne(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "%s", m)
-}
-
-func getLimitOffset(query url.Values) (int, int) {
-	limit, offset := 20, 0
-
-	l, err := strconv.Atoi(query.Get("limit"))
-	if err == nil {
-		limit = l
-	}
-
-	o, err := strconv.Atoi(query.Get("offset"))
-	if err == nil {
-		offset = o
-	}
-
-	return limit, offset
 }
