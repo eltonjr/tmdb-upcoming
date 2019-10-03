@@ -13,6 +13,11 @@ type vars struct {
 	TMDB struct {
 		Address string
 		Key     string
+
+		Images struct {
+			BasePath   string
+			PosterSize string
+		}
 	}
 }
 

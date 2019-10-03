@@ -8,6 +8,7 @@ import (
 
 	"github.com/eltonjr/tmdb-upcoming/server/env"
 	"github.com/eltonjr/tmdb-upcoming/server/health"
+	"github.com/eltonjr/tmdb-upcoming/server/images"
 	"github.com/eltonjr/tmdb-upcoming/server/movies"
 )
 
@@ -16,6 +17,8 @@ func main() {
 
 	r.GET("/v1/movies", movies.GetAll)
 	r.GET("/v1/movies/:id", movies.GetOne)
+
+	r.GET("/v1/posters/:id", images.GetImage)
 
 	r.GET("/v1/health", health.Check)
 
