@@ -108,11 +108,16 @@ func (m ResultMovie) toMovieOutput() Movie {
 		release = &r
 	}
 
+	var genre string
+	if len(m.GenreIDs) > 0 {
+		genre = genres.Get(m.GenreIDs[0])
+	}
+
 	return Movie{
 		ID:          m.ID,
 		Name:        m.Title,
 		Poster:      m.PosterPath,
-		Genre:       genres.Get(m.GenreIDs[0]),
+		Genre:       genre,
 		ReleaseDate: release,
 		Overview:    m.Overview,
 	}
