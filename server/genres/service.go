@@ -25,8 +25,6 @@ type (
 const genresPath = "/genre/movie/list"
 
 func init() {
-	collection = make(map[int]string)
-
 	url := fmt.Sprintf("%s%s", env.Vars.TMDB.Address, genresPath)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -51,7 +49,13 @@ func init() {
 		log.Fatalf("failed to read genres response: %v", err)
 	}
 
-	for _, g := range gs.Genres {
-		collection[g.ID] = g.Name
+	collection = flatArrayToMap(gs)
+}
+
+func flatArrayToMap(response Response) map[int]string {
+	result := make(map[int]string)
+	for _, g := range response.Genres {
+		result[g.ID] = g.Name
 	}
+	return result
 }

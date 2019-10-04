@@ -29,6 +29,11 @@ func main() {
 	}
 }
 
+// WrapperResponseWriter is needed because http.ResponseWriter
+// does not expose the returned status code.
+// To log the returned status code, a new implementation of the
+// ResponseWriter interface is needed to override the WriteHeader
+// method and store the status code.
 type wrapperRW struct {
 	http.ResponseWriter
 	status int

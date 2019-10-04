@@ -23,7 +23,7 @@ type vars struct {
 
 // Vars holds custom variables needed for the system to work.
 // When the system starts, a process checks every needed var
-// and crashes if some are missing
+// and crashes if some is missing
 var Vars vars
 
 func init() {
