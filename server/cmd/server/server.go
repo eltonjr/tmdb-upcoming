@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 
@@ -23,7 +24,27 @@ func main() {
 	r.GET("/v1/health", health.Check)
 
 	log.Printf("Server is running at %s", env.Vars.Server.Address)
-	if err := http.ListenAndServe(env.Vars.Server.Address, r); err != nil {
+	if err := http.ListenAndServe(env.Vars.Server.Address, middleware(r)); err != nil {
 		log.Fatalf("ListenAndServe: %v", err)
 	}
+}
+
+type wrapperRW struct {
+	http.ResponseWriter
+	status int
+}
+
+func (w *wrapperRW) WriteHeader(status int) {
+	w.status = status
+	w.ResponseWriter.WriteHeader(status)
+}
+
+func middleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		t1 := time.Now()
+		ww := wrapperRW{ResponseWriter: w}
+		next.ServeHTTP(&ww, r)
+		t2 := time.Now()
+		log.Printf("%s %s - %d %v", r.Method, r.URL, ww.status, t2.Sub(t1))
+	})
 }
