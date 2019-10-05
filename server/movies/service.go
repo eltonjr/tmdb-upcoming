@@ -24,12 +24,13 @@ type (
 
 	// ResultMovie is the mapped schema from the movie endpoint
 	ResultMovie struct {
-		ID          int    `json:"id"`
-		Title       string `json:"title"`
-		PosterPath  string `json:"poster_path"`
-		GenreIDs    []int  `json:"genre_ids"`
-		ReleaseDate string `json:"release_date"`
-		Overview    string `json:"overview"`
+		ID          int            `json:"id"`
+		Title       string         `json:"title"`
+		PosterPath  string         `json:"poster_path"`
+		GenreIDs    []int          `json:"genre_ids"`
+		Genres      []genres.Genre `json:"genres"`
+		ReleaseDate string         `json:"release_date"`
+		Overview    string         `json:"overview"`
 	}
 )
 
@@ -118,6 +119,10 @@ func (m ResultMovie) toMovieOutput(slim bool) Movie {
 
 	if len(m.GenreIDs) > 0 {
 		movie.Genre = genres.Get(m.GenreIDs[0])
+	}
+
+	if len(m.Genres) > 0 {
+		movie.Genre = m.Genres[0].Name
 	}
 
 	if !slim {

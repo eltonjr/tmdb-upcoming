@@ -19,7 +19,7 @@ func main() {
 	r.GET("/v1/movies", movies.GetAll)
 	r.GET("/v1/movies/:id", movies.GetOne)
 
-	r.GET("/v1/posters/:id", images.GetImage)
+	r.GET("/v1/images/:id", images.GetImage)
 
 	r.GET("/v1/health", health.Check)
 
@@ -41,7 +41,6 @@ type wrapperRW struct {
 
 func (w *wrapperRW) WriteHeader(status int) {
 	w.status = status
-	w.ResponseWriter.WriteHeader(status)
 }
 
 func middleware(next http.Handler) http.Handler {
