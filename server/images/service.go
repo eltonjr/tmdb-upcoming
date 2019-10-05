@@ -45,5 +45,5 @@ func init() {
 	}
 
 	env.Vars.TMDB.Images.BasePath = c.Images.BaseURL
-	env.Vars.TMDB.Images.PosterSize = c.Images.PosterSizes[3]
+	env.Vars.TMDB.Images.PosterSize = c.Images.PosterSizes[3] // TODO make this size dynamic
 }

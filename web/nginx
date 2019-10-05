@@ -10,7 +10,7 @@ server {
 	}
 
 	location /server {
-		proxy_pass http://localhost:9000/v1;
+		proxy_pass http://%BACKEND_SERVICE_HOST:%BACKEND_SERVICE_PORT/v1;
 	}
 
 }

@@ -19,8 +19,10 @@ RUN npm run build
 # ---- Release ----
 FROM nginx:1.17-alpine AS release
 COPY --from=build /app/dist /var/www/tmdb
-COPY nginx /etc/nginx/conf.d/tmdb.conf
+COPY nginx /etc/nginx/conf.d/template.conf
+COPY docker-entrypoint.sh /opt
+RUN chmod +x /opt/docker-entrypoint.sh
 
 EXPOSE 9090
 
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT /opt/docker-entrypoint.sh
