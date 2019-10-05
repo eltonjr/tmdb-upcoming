@@ -6,7 +6,7 @@ const baseURL = '/server'
 // default configurations go here
 // like timeout and headers
 const instance = axios.create({
-	baseURL
+  baseURL
 })
 
 // public routes the app will consume

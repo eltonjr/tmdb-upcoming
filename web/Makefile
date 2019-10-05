@@ -17,3 +17,11 @@ run: ## Run the system locally
 .PHONY: lint
 lint: ## Check the system syntax
 	npm run lint
+
+.PHONY: ops-build
+ops-build: ## Compiles the system using docker
+	docker build -t tmdb-web .
+
+.PHONY: ops-run
+ops-run: ## Runs the system using docker
+	docker run -d --name tmdb-web -p 9090:9090 tmdb-web
