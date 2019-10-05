@@ -11,7 +11,7 @@ CMD_PATH := cmd/server
 help:  ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; printf "Usage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
-.PHONY: deps	
+.PHONY: deps
 deps: ## Install go dependencies based on go mod
 	GO111MODULE=on go get -insecure ./...
 
@@ -41,4 +41,4 @@ ops-build: ## Compiles the system using docker
 
 .PHONY: ops-run
 ops-run: ## Runs the system using docker
-	docker run -d --name tmdb-server --env-file server.env --env-file secrets.env -p 9000:9000 tmdb-server
+	docker run -d --name tmdb-server --env-file server.env --env-file secrets.env --net host tmdb-server

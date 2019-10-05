@@ -15,5 +15,7 @@ RUN cd cmd/server && GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -a -insta
 # ---- Release ----
 FROM alpine:3.10 AS release
 COPY --from=build /app/cmd/server/server /opt/
+
 EXPOSE 9000
+
 CMD ./opt/server

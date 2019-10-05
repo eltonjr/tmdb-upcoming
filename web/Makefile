@@ -24,4 +24,4 @@ ops-build: ## Compiles the system using docker
 
 .PHONY: ops-run
 ops-run: ## Runs the system using docker
-	docker run -d --name tmdb-web -p 9090:9090 tmdb-web
+	docker run -d --name tmdb-web --net host -e BACKEND_SERVICE_HOST=localhost -e BACKEND_SERVICE_PORT=9000 tmdb-web
