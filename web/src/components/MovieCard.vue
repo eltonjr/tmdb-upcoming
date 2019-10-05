@@ -2,7 +2,7 @@
   <div class="card is-shady">
     <div class="card-image">
       <figure class="image is-2by3">
-        <img src="https://source.unsplash.com/RWnpyGtY1aU" alt="Placeholder image" class="modal-button" data-target="modal-image2">
+        <img :src="src(movie.poster)" alt="Movie Poster" class="modal-button" data-target="modal-image2">
       </figure>
     </div>
     <div class="card-content">
@@ -19,6 +19,11 @@ export default {
   },
   data () {
     return {
+    }
+  },
+  methods: {
+    src (img) {
+      return 'images' + img
     }
   }
 }

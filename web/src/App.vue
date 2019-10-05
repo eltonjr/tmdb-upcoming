@@ -20,9 +20,9 @@
         <div class="column">
           <div class="field has-addons">
             <div class="control">
-              <input class="input" type="text" placeholder="Search by name">
+              <input class="input" type="text" placeholder="Search by name" v-model="typed">
             </div>
-            <div class="control">
+            <div class="control" @click="search()">
               <a class="button is-dark">
                 Search
               </a>
@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <movie-list></movie-list>
+    <movie-list :name="name"></movie-list>
 
   </div>
 </template>
@@ -46,11 +46,16 @@ export default {
   name: 'App',
   data () {
     return {
+      name: '',
+      typed: ''
     }
   },
   computed: {
   },
   methods: {
+    search () {
+      this.name = this.typed
+    }
   },
   components: {
     MovieList

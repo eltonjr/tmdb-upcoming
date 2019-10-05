@@ -7,7 +7,7 @@
           <div class="column is-two-fifths">
             <figure class="media-left">
               <p class="image is-2by3">
-                <img src="https://source.unsplash.com/RWnpyGtY1aU">
+                <img :src="src(movie.poster)" alt="Movie Poster" />
               </p>
             </figure>
           </div>
@@ -18,7 +18,7 @@
                 Genre: <strong>{{movie.genre}}</strong>
               </p>
               <p class="is-size-5 subtitle" v-if="movie.releaseDate">
-                Release Date: <strong>{{movie.releaseDate}}</strong>
+                Release Date: <strong>{{date(movie.releaseDate)}}</strong>
               </p>
               <p class="is-size-5 subtitle" v-if="movie.overview">
                 {{movie.overview}}
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'MovieDetails',
   props: {
@@ -44,6 +46,12 @@ export default {
     }
   },
   methods: {
+    date (raw) {
+      return moment(raw).format('MM/DD/YYYY')
+    },
+    src (img) {
+      return 'images' + img
+    },
     close () {
       this.$emit('close')
     }
