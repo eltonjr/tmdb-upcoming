@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     src (img) {
-      return 'images' + img
+      return '/server/images' + img
     }
   }
 }

@@ -1,9 +1,12 @@
 import axios from 'axios'
 
+const baseURL = '/server'
+
 // instance of the axios lib
 // default configurations go here
 // like timeout and headers
 const instance = axios.create({
+	baseURL
 })
 
 // public routes the app will consume

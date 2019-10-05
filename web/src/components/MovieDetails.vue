@@ -50,7 +50,7 @@ export default {
       return moment(raw).format('MM/DD/YYYY')
     },
     src (img) {
-      return 'images' + img
+      return '/server/images' + img
     },
     close () {
       this.$emit('close')
