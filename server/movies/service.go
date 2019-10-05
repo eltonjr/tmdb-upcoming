@@ -67,7 +67,7 @@ func getMovies(name, page string) (Collection, error) {
 
 	var c Collection
 	for _, m := range ms.Results {
-		c.Movies = append(c.Movies, m.toMovieOutput())
+		c.Movies = append(c.Movies, m.toSlimMovieOutput())
 	}
 
 	return c, nil
@@ -98,27 +98,36 @@ func getMovie(id int) (Movie, error) {
 		return Movie{}, fmt.Errorf("failed to read movie response: %v", err)
 	}
 
-	return m.toMovieOutput(), nil
+	return m.toFullMovieOutput(), nil
 }
 
-func (m ResultMovie) toMovieOutput() Movie {
-	r, err := time.Parse("2006-01-02", m.ReleaseDate)
-	var release *time.Time
-	if err == nil {
-		release = &r
+func (m ResultMovie) toSlimMovieOutput() Movie {
+	return m.toMovieOutput(true)
+}
+
+func (m ResultMovie) toFullMovieOutput() Movie {
+	return m.toMovieOutput(false)
+}
+
+func (m ResultMovie) toMovieOutput(slim bool) Movie {
+	movie := Movie{
+		ID:     m.ID,
+		Name:   m.Title,
+		Poster: m.PosterPath,
 	}
 
-	var genre string
 	if len(m.GenreIDs) > 0 {
-		genre = genres.Get(m.GenreIDs[0])
+		movie.Genre = genres.Get(m.GenreIDs[0])
 	}
 
-	return Movie{
-		ID:          m.ID,
-		Name:        m.Title,
-		Poster:      m.PosterPath,
-		Genre:       genre,
-		ReleaseDate: release,
-		Overview:    m.Overview,
+	if !slim {
+		r, err := time.Parse("2006-01-02", m.ReleaseDate)
+		if err == nil {
+			movie.ReleaseDate = &r
+		}
+
+		movie.Overview = m.Overview
 	}
+
+	return movie
 }
