@@ -41,5 +41,4 @@ ops-build: ## Compiles the system using docker
 
 .PHONY: ops-run
 ops-run: ## Runs the system using docker
-	# docker run -d --name tmdb-server --env-file server.env --env-file secrets.env -p 9000:9000 tmdb-server
-	docker run -d --name tmdb-server --env-file server.env --env-file secrets.env --net host tmdb-server
+	docker run -d --name tmdb-server --env-file server.env --env-file secrets.env -p 9000:9000 tmdb-server
