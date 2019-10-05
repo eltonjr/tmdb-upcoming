@@ -1,0 +1,16 @@
+server {
+
+	listen 9090;
+
+	root /var/www/tmdb;
+	index index.html;
+
+	location / {
+		try_files $uri $uri/ break;
+	}
+
+	location /server {
+		proxy_pass http://localhost:9000/v1;
+	}
+
+}
