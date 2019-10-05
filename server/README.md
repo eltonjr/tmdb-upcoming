@@ -29,7 +29,19 @@ Make targets:
 
 #### Building and running - with Docker
 
-// TODO
+A `Makefile` is provided to perform most tasks.
+
+You will not need to have Go in your local environment, just Docker is enough. However, the secrets variables will need to be exported anyway.
+
+    Usage:
+        make <target>
+
+    Targets:
+        help                  Display this help
+        secrets-unlock        Unlock the secret variables
+        ops-build             Compiles the system using docker
+        ops-run               Runs the system using docker
+
 
 #### Using the API
 

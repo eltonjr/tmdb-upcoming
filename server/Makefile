@@ -34,3 +34,12 @@ secrets-unlock: ## Unlock the secret variables
 .PHONY: secrets-lock
 secrets-lock: ## Lock the secret variables
 	gpg -c secrets.env
+
+.PHONY: ops-build
+ops-build: ## Compiles the system using docker
+	docker build -t tmdb-server .
+
+.PHONY: ops-run
+ops-run: ## Runs the system using docker
+	# docker run -d --name tmdb-server --env-file server.env --env-file secrets.env -p 9000:9000 tmdb-server
+	docker run -d --name tmdb-server --env-file server.env --env-file secrets.env --net host tmdb-server
