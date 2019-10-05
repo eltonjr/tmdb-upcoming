@@ -48,9 +48,6 @@ export default {
       return arr
     }
   },
-  created () {
-    this.loadMovies()
-  },
   methods: {
     select (movie) {
       service.details(movie.id).then(data => {
